@@ -12,16 +12,6 @@
 
 #include "ScalarConverter.hpp"
 
-ScalarConverter::ScalarConverter(){
-}
-
-ScalarConverter::ScalarConverter(const ScalarConverter &){
-}
-
-ScalarConverter &ScalarConverter::operator=(const ScalarConverter &){
-    return (*this);
-}
-
 void spez_case(const std::string &input, bool wrong_input) {
     std::cout << "char: impossible\nint: impossible" << std::endl;
     if(wrong_input == false)
@@ -56,21 +46,30 @@ void int_handling(double d)
         std::cout << "int: " << static_cast<int>(d) << std::endl;
 }
 
-void float_handling(double d)
+void float_handling(double d, size_t precision)
 {
     if (d < -std::numeric_limits<float>::max() || d > std::numeric_limits<float>::max())
         std::cout << "float: impossible" << std::endl;
     else
-    {
-        float f = static_cast<float>(d);
-        if(f == static_cast<int>(f))
-            std::cout << std::fixed << std::setprecision(1) << "float: " << f << "f" << std::endl;
-        else
-            std::cout << "float: " << f << "f" << std::endl;
-    }
+        std::cout << std::fixed << std::setprecision(precision) << "float: " << static_cast<float>(d) << "f" << std::endl;
 }
 
-void ScalarConverter::convert(const std::string &input) {
+size_t precision_calc(const std::string &input)
+{
+    size_t precision = 0;
+    size_t pos = input.find('.');
+    if (pos != std::string::npos) {
+        pos++;
+        while(pos + precision < input.length())
+            precision++;
+    }
+    if(precision == 0)
+        precision++;
+    return(precision);
+}
+
+void ScalarConverter::convert(const std::string &input)
+{
     
     if (input == "+inf" || input == "-inf" || input == "nan" ||
         input == "+inff" || input == "-inff" || input == "nanf")
@@ -86,12 +85,10 @@ void ScalarConverter::convert(const std::string &input) {
         return;
     }
 
+    size_t precision = precision_calc(input);
+    
     char_handling(d);
     int_handling(d);
-    float_handling(d);
-    if(d == static_cast<int>(d))
-        std::cout << std::fixed << std::setprecision(1) << "double: " << d << std::endl;
-    else
-        std::cout << "double: " << d << std::endl;
-    
+    float_handling(d, precision);
+    std::cout << std::fixed << std::setprecision(precision) << "double: " << d << std::endl;
 }
