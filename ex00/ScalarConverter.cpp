@@ -60,8 +60,14 @@ void float_handling(double d)
 {
     if (d < -std::numeric_limits<float>::max() || d > std::numeric_limits<float>::max())
         std::cout << "float: impossible" << std::endl;
-    else 
-        std::cout << "float: " << static_cast<float>(d) << "f" << std::endl;
+    else
+    {
+        float f = static_cast<float>(d);
+        if(f == static_cast<int>(f))
+            std::cout << std::fixed << std::setprecision(1) << "float: " << f << "f" << std::endl;
+        else
+            std::cout << "float: " << f << "f" << std::endl;
+    }
 }
 
 void ScalarConverter::convert(const std::string &input) {
@@ -83,6 +89,9 @@ void ScalarConverter::convert(const std::string &input) {
     char_handling(d);
     int_handling(d);
     float_handling(d);
-    std::cout << "double: " << d << std::endl;
+    if(d == static_cast<int>(d))
+        std::cout << std::fixed << std::setprecision(1) << "double: " << d << std::endl;
+    else
+        std::cout << "double: " << d << std::endl;
     
 }
