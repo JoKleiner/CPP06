@@ -6,7 +6,7 @@
 /*   By: joklein <joklein@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:02:32 by joklein           #+#    #+#             */
-/*   Updated: 2025/07/02 17:00:25 by joklein          ###   ########.fr       */
+/*   Updated: 2025/07/02 17:04:32 by joklein          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,17 @@ void identify(Base& p)
 {
     std::cout << "Type of the object referenced: ";
     try {
-        A& a = dynamic_cast<A&>(p);
-        (void)a;
+        dynamic_cast<A&>(p);
         std::cout << "A" << std::endl;
     } catch (std::bad_cast&) {}
 
     try {
-        B& b = dynamic_cast<B&>(p);
-        (void)b;
+        dynamic_cast<B&>(p);
         std::cout << "B" << std::endl;
     } catch (std::bad_cast&) {}
 
     try {
-        C& c = dynamic_cast<C&>(p);
-        (void)c;
+        dynamic_cast<C&>(p);
         std::cout << "C" << std::endl;
     } catch (std::bad_cast&) {}
 }
