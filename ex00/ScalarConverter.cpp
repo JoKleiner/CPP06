@@ -12,83 +12,97 @@
 
 #include "ScalarConverter.hpp"
 
-void spez_case(const std::string &input, bool wrong_input) {
+int spez_case(const std::string &input)
+{
     std::cout << "char: impossible\nint: impossible" << std::endl;
-    if(wrong_input == false)
+
+    if(input == "+inf" || input == "-inf" || input == "nan"){
+        std::cout << "float: " << input << "f\n";
+        std::cout << "double: " << input << std::endl;
+    }
+    else
     {
-        if(input == "+inf" || input == "-inf" || input == "nan"){
-            std::cout << "float: " << input << "f\n";
-            std::cout << "double: " << input << std::endl;
-        }else {
-            std::cout << "float: " << input << "\n";
-            std::cout << "double: " << input.substr(0, input.length() - 1) << std::endl;
-        }
+        std::cout << "float: " << input << "\n";
+        std::cout << "double: " << input.substr(0, input.length() - 1) << std::endl;
     }
-    else
-        std::cout << "float: nanf\ndouble: nan" << std::endl;
+    return(1);
 }
 
-void char_handling(double d)
+int non_convertable()
 {
-    if (d < 0 || d > 127)
-        std::cout << "char: impossible" << std::endl;
-    else if(!std::isprint(static_cast<int>(d)))
-        std::cout << "char: Non displayable" << std::endl;
-    else
-        std::cout << "char: '" << static_cast<char>(d) << "'" << std::endl;
+    std::cout << "char: impossible\nint: impossible\nfloat: impossible\ndouble: impossible" << std::endl;
+    return(1);
 }
 
-void int_handling(double d)
+int check_input(const std::string &input)
 {
-    if (d < std::numeric_limits<int>::min() || d > std::numeric_limits<int>::max())
-        std::cout << "int: impossible" << std::endl;
-    else
-        std::cout << "int: " << static_cast<int>(d) << std::endl;
-}
+    size_t pos = 0;
+    bool has_dot = false;
 
-void float_handling(double d, size_t precision)
-{
-    if (d < -std::numeric_limits<float>::max() || d > std::numeric_limits<float>::max())
-        std::cout << "float: impossible" << std::endl;
-    else
-        std::cout << std::fixed << std::setprecision(precision) << "float: " << static_cast<float>(d) << "f" << std::endl;
-}
+    if(input[0] == '+' || input[0] == '-')
+        pos = 1;
+        
+    if(input.find('.') == pos)
+        return(1);
 
-size_t precision_calc(const std::string &input)
-{
-    size_t precision = 0;
-    size_t pos = input.find('.');
-    if (pos != std::string::npos) {
-        pos++;
-        while(pos + precision < input.length())
-            precision++;
+    for (; pos < input.length(); pos++)
+    {
+        if(has_dot && input[pos] == '.')
+            return (1);
+        if(input[pos] == '.')
+            has_dot = true;
+        if(input[pos] == 'f' && pos == input.length() - 1)
+            return (0);
+        if(!std::isdigit(input[pos]) && input[pos] != '.')
+            return (1);
     }
-    if(precision == 0)
-        precision++;
-    return(precision);
+    return (0);
 }
 
-void ScalarConverter::convert(const std::string &input)
+int ScalarConverter::convert(const std::string &input)
 {
     
     if (input == "+inf" || input == "-inf" || input == "nan" ||
         input == "+inff" || input == "-inff" || input == "nanf")
-    {
-        spez_case(input, false);
-        return;
-    }
+        return(spez_case(input));
     
-    char *end;
-    double d = std::strtod(input.c_str(), &end);
-    if(*end != '\0'){
-        spez_case(input, true);
-        return;
+    if(check_input(input) != 0)
+        return(non_convertable());
+    
+    if (input.find('.') == std::string::npos)
+    {
+        std::cout << std::fixed << std::setprecision(1);
+
+        //char handling
+        if(input.length() == 1 && std::isprint(input[0]))
+            return(char_handling(input[0]), 0);
+
+        //int handling
+        try{
+            return (int_handling(std::stoi(input)), 0);
+        }catch(const std::exception &e){
+            return(non_convertable());
+        }
     }
 
-    size_t precision = precision_calc(input);
-    
-    char_handling(d);
-    int_handling(d);
-    float_handling(d, precision);
-    std::cout << std::fixed << std::setprecision(precision) << "double: " << d << std::endl;
+    //precision handling
+    size_t pos = input.find('.') + 1;
+    size_t precision = 0;
+    while(pos + precision < input.length() && std::isdigit(input[pos + precision]))
+        precision++;
+    std::cout << std::fixed << std::setprecision(precision);
+
+    //float and double handling
+    try{
+        if(input[pos + precision] == 'f' && input[pos + precision + 1] == '\0' && precision != 0)
+            float_handling(std::stof(input));
+        else if(input[pos + precision] == '\0' && precision != 0)
+            double_handling(std::stod(input));
+        else
+            return(non_convertable());
+    }
+    catch(const std::exception &e){
+        return(non_convertable());
+    }
+    return(0);
 }

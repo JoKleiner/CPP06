@@ -15,9 +15,21 @@
 #include <iostream>
 #include <limits>
 #include <iomanip>
+#include <cctype>
 
 class ScalarConverter
 {
     public:
-        static void convert(const std::string &input);
+        static int convert(const std::string &input);
+    
+    private:
+        ScalarConverter();
+	    ScalarConverter(const ScalarConverter &other);
+	    ScalarConverter &operator=(const ScalarConverter &other);
+	    ~ScalarConverter() = default;
 };
+
+void char_handling(char cha);
+void int_handling(int i);
+void float_handling(float f);
+void double_handling(double d);
