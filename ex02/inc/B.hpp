@@ -6,7 +6,7 @@
 /*   By: joklein <joklein@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 15:59:34 by joklein           #+#    #+#             */
-/*   Updated: 2025/07/09 17:13:04 by joklein          ###   ########.fr       */
+/*   Updated: 2025/07/10 10:12:23 by joklein          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,4 @@
 
 class B : public Base
 {
-    public:
-        ~B() override = default;
-    
-    private:
-        B();
-	    B(const B &other);
-	    B &operator=(const B &other);
 };

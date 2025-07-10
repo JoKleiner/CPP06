@@ -6,7 +6,7 @@
 /*   By: joklein <joklein@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:02:32 by joklein           #+#    #+#             */
-/*   Updated: 2025/07/02 17:04:32 by joklein          ###   ########.fr       */
+/*   Updated: 2025/07/10 10:15:47 by joklein          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@
 #include "inc/C.hpp"
 
 #include <iostream>
-#include <ctime>
+# include <random>
 
 Base* generate()
 {
+    std::random_device rand;
     int random = rand() % 3;
     if (random == 0)
         return new A();
@@ -46,36 +47,34 @@ void identify(Base& p)
 {
     std::cout << "Type of the object referenced: ";
     try {
-        dynamic_cast<A&>(p);
+        (void)dynamic_cast<A&>(p);
         std::cout << "A" << std::endl;
     } catch (std::bad_cast&) {}
 
     try {
-        dynamic_cast<B&>(p);
+        (void)dynamic_cast<B&>(p);
         std::cout << "B" << std::endl;
     } catch (std::bad_cast&) {}
 
     try {
-        dynamic_cast<C&>(p);
+        (void)dynamic_cast<C&>(p);
         std::cout << "C" << std::endl;
     } catch (std::bad_cast&) {}
 }
 
 int main()
 { 
-    std::srand(static_cast<unsigned int>(std::time(0)));
-    
     Base *a = new A();
     Base *b = new B();
     Base *c = new C();
 
-    std::cout << "Identify 'a'" << std::endl;
+    std::cout << "Type 'A'" << std::endl;
     identify(a);
     identify(*a);
-    std::cout << "\nIdentify 'b'" << std::endl;
+    std::cout << "\nType 'B'" << std::endl;
     identify(b);
     identify(*b);
-    std::cout << "\nIdentify 'c'" << std::endl;
+    std::cout << "\nType 'C'" << std::endl;
     identify(c);
     identify(*c);
 
