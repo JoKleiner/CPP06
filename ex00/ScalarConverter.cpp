@@ -51,9 +51,9 @@ int check_input(const std::string &input)
             return (1);
         if(input[pos] == '.')
             has_dot = true;
-        if(input[pos] == 'f' && pos == input.length() - 1)
+        if(input[pos] == 'f' && pos == input.length() - 1 && has_dot == true)
             return (0);
-        if(!std::isdigit(input[pos]) && pos == input.length() - 1)
+        if(!std::isdigit(input[pos]) && pos == input.length() - 1 && input[pos] != 'f' && has_dot == true)
             return (0);
         if(!std::isdigit(input[pos]) && input[pos] != '.')
             return (1);

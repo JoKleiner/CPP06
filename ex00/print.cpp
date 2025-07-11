@@ -6,7 +6,7 @@
 /*   By: joklein <joklein@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 17:13:53 by joklein           #+#    #+#             */
-/*   Updated: 2025/07/09 17:16:49 by joklein          ###   ########.fr       */
+/*   Updated: 2025/07/11 15:25:06 by joklein          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void char_handling(char cha)
 {
-    std::cout << "char: " << cha;
+    std::cout << "char: '" << cha << "'";
     std::cout << "\nint: " << static_cast<int>(cha);
     std::cout << "\nfloat: " << static_cast<float>(cha) << "f";
     std::cout << "\ndouble: " << static_cast<double>(cha) << std::endl;
